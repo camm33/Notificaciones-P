@@ -1,0 +1,64 @@
+from plyer import notification  # Corrige el import
+
+class Cliente:
+    base_datos_clientes = []
+
+    def __init__(self, caja_nombre, caja_correo, caja_telefono, caja_contrasena):  # Corrige _init_ -> __init__
+        self.nombre = caja_nombre
+        self.correo = caja_correo
+        self.telefono = caja_telefono
+        self.contrasena = caja_contrasena
+
+    def iniciar_sesion(self, contrasena_ingresada):
+        for cliente in Cliente.base_datos_clientes:
+            if cliente.correo == self.correo:
+                if cliente.contrasena == contrasena_ingresada:
+                    print(f"<Bienvenido de nuevo, {self.nombre}. Se inició sesión correctamente>")
+                    return True
+                else:
+                    print("Contraseña incorrecta.")
+                    return False
+        print("Correo no registrado.")
+        return False
+
+    def registrarse(self):
+        for cliente in Cliente.base_datos_clientes:
+            if cliente.correo == self.correo:
+                print("Ya existe un cliente con este correo.")
+                return False
+
+        Cliente.base_datos_clientes.append(self)
+        print(f"Registro exitoso para {self.nombre}.")
+
+        # Notificación push al registrarse
+        notification.notify(
+            title="Registro exitoso",
+            message=f"{self.nombre}, tu cuenta ha sido creada con éxito.",
+            timeout=5
+        )
+        return True
+
+# ----------- INTERFAZ CON INPUTS -----------
+
+def menu():
+    print("\n--- Registro de Cliente ---")
+    nombre = input("Nombre: ")
+    correo = input("Correo: ")
+    telefono = input("Teléfono: ")
+    contrasena = input("Contraseña: ")
+
+    nuevo_cliente = Cliente(nombre, correo, telefono, contrasena)
+    
+    if nuevo_cliente.registrarse():
+        print("Puedes intentar iniciar sesión a continuación.")
+
+        print("\n--- Iniciar Sesión ---")
+        correo_login = input("Correo: ")
+        contrasena_login = input("Contraseña: ")
+
+        # Creamos un objeto temporal con los datos necesarios para buscar coincidencia
+        cliente_temporal = Cliente("", correo_login, "", "")
+        cliente_temporal.iniciar_sesion(contrasena_login)
+
+# Ejecutar el menú
+menu()
