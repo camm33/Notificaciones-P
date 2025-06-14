@@ -1,4 +1,4 @@
-from plyer import notification  # Corrige el import
+from plyer import notification 
 
 class Cliente:
     base_datos_clientes = []
@@ -38,8 +38,6 @@ class Cliente:
         )
         return True
 
-# ----------- INTERFAZ CON INPUTS -----------
-
 def menu():
     print("\n--- Registro de Cliente ---")
     nombre = input("Nombre: ")
@@ -60,5 +58,4 @@ def menu():
         cliente_temporal = Cliente("", correo_login, "", "")
         cliente_temporal.iniciar_sesion(contrasena_login)
 
-# Ejecutar el menú
 menu()
